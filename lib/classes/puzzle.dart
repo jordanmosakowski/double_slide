@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:puzzle_hack/classes/enums.dart';
 import 'package:puzzle_hack/classes/face.dart';
@@ -8,6 +10,8 @@ class Puzzle {
   final int size;
   late PuzzleFace _front;
   late PuzzleFace _back;
+
+  Random _rand = Random();
 
   final AnimationController _controller;
   late Animation<double> _rotate;
@@ -23,12 +27,23 @@ class Puzzle {
     ).animate(_controller);
   }
 
+  void shuffle(){
+    List<PuzzlePiece> pieces = [...front.pieces,...back.pieces];
+    pieces.shuffle();
+    for(int i=0; i<pieces.length/2; i++){
+      front.pieces[i] = pieces[i];
+      back.pieces[i] = pieces[i+pieces.length~/2];
+    }
+  }
+
   void clearAnimations(){
     for(PuzzlePiece p in front.pieces) {
       p.rotateAnimation = null;
+      p.slideAnimation = null;
     }
     for(PuzzlePiece p in back.pieces) {
       p.rotateAnimation = null;
+      p.slideAnimation = null;
     }
   }
 

@@ -46,7 +46,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
 
   late final AnimationController _flipController = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 500),
+    duration: const Duration(milliseconds: 200),
   )..addListener(() {
     setState(() {});
   });
@@ -115,45 +115,76 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter Puzzle Hack'),
+        title: const Text('Flutter Puzzle Hack'),
         actions: [
           IconButton(
-            icon: Icon(Icons.rotate_90_degrees_ccw),
+            icon: const Icon(Icons.shuffle),
             onPressed: (){
               setState(() {
-                puzzle.flipVertically(3);
-                _flipController.forward(from: 0.0);
+                puzzle.shuffle();
               });
             },
           ),
-          IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: (){
-              setState(() {
-                puzzle.flipHorizontally(3);
-                _flipController.forward(from: 0.0);
-              });
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.flip),
-            onPressed: (){
-              setState(() {
-                puzzle.flipAll();
-                _flipController.forward(from: 0.0);
-              });
-            },
-          )
         ],
       ),
       body: Center(
-        child: Container(
-          // color: Colors.blue[800],
-          child: SizedBox(
-            width: 400,
-            height: 400,
-            child: Stack(
-              children: [...puzzle.front.pieces,...puzzle.back.pieces].asMap().keys.map((int index) {
+        child: SizedBox(
+          width: 450,
+          height: 450,
+          child: Stack(
+            children: [
+              Positioned(
+                top: 0,
+                left: 0,
+                width: 400,
+                height: 400,
+                child: Container(color: Colors.black)
+              ),
+              for(int i=0; i<puzzle.size; i++)
+                Positioned(
+                  bottom: 0,
+                  left: i * 400 / puzzle.size + 25,
+                  child: IconButton(
+                    icon: Icon(Icons.south),
+                    iconSize: 34,
+                    onPressed: (){
+                      setState(() {
+                        puzzle.flipVertically(i);
+                        _flipController.forward(from: 0.0);
+                      });
+                    },
+                  )
+                ),
+              for(int i=0; i<puzzle.size; i++)
+                Positioned(
+                  top: i * 400 / puzzle.size + 25,
+                  right: 0,
+                  child: IconButton(
+                    icon: Icon(Icons.east),
+                    iconSize: 34,
+                    onPressed: (){
+                      setState(() {
+                        puzzle.flipHorizontally(i);
+                        _flipController.forward(from: 0.0);
+                      });
+                    },
+                  )
+                ),
+              Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: IconButton(
+                    icon: Icon(Icons.sync),
+                    iconSize: 34,
+                    onPressed: (){
+                      setState(() {
+                        puzzle.flipAll();
+                        _flipController.forward(from: 0.0);
+                      });
+                    },
+                  )
+                ),
+              ...[...puzzle.front.pieces,...puzzle.back.pieces].asMap().keys.map((int index) {
                 int i = index % (puzzle.size * puzzle.size);
                 PuzzleFace face = (i==index ? puzzle.front : puzzle.back);
                 PuzzlePiece piece = face.pieces[i];
@@ -178,6 +209,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
                             setState((){
                               // print("Tapped ${piece.color} ${piece.value}");
                               if(pieceToMove !=null && moveOptions[i]!=null){
+                                puzzle.clearAnimations();
                                 face.movePiece(pieceToMove!,_slideController, moveOptions[i]!);
                                 clearMoveOptions();
                                 _slideController.forward(from: 0.0);
@@ -191,6 +223,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
                               }
                               if(moves.length == 1){
                                 clearMoveOptions();
+                                puzzle.clearAnimations();
                                 pieceToMove = null;
                                 face.movePiece(piece, _slideController, moves.first);
                                 _slideController.forward(from: 0.0);
@@ -221,7 +254,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
                             ),
                             child: moveOptions[i] != null ? Icon(
                                       moveOptions[i]!.icon,
-                                      color: Colors.black,
+                                      color: Colors.white,
                                     ) : (piece.color != PuzzleColor.empty
                                 ? Center(
                                     child: Transform.rotate(
@@ -237,8 +270,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
                   ),
                 );
               }).toList()
-            )
-          ),
+            ]
+          )
         )
       )
     );

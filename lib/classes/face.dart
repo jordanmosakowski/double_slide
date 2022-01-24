@@ -50,7 +50,7 @@ class PuzzleFace {
     return moves.toSet().toList();
   }
 
-  void movePiece(PuzzlePiece p,AnimationController controller, SlideMove move){
+  void movePiece(PuzzlePiece p,AnimationController? controller, SlideMove move){
     clearAnimations();
     if(canMovePiece(p).isEmpty){
       return;
@@ -73,13 +73,13 @@ class PuzzleFace {
       PuzzlePiece empty = _pieces[emptyIndex];
       for(int i=emptyIndex; i!=index; i+=direction){
         _pieces[i] = _pieces[i+direction];
-        _pieces[i].slideAnimation = Tween<Offset>(
+        _pieces[i].slideAnimation = controller != null ? Tween<Offset>(
             begin: Offset(direction.toDouble(), 0.0),
             end: Offset.zero,
           ).animate(CurvedAnimation(
             parent: controller,
             curve: Curves.easeInOut,
-          ));
+          )) : null;
       }
       _pieces[index] = empty;
     }
@@ -97,13 +97,13 @@ class PuzzleFace {
       PuzzlePiece empty = _pieces[emptyIndex];
       for(int i=emptyIndex; i!=index; i+=_size*direction){
         _pieces[i] = _pieces[i+_size*direction];
-        _pieces[i].slideAnimation = Tween<Offset>(
+        _pieces[i].slideAnimation = controller !=null ? Tween<Offset>(
             begin: Offset(0.0, direction.toDouble()),
             end: Offset.zero,
           ).animate(CurvedAnimation(
             parent: controller,
             curve: Curves.easeInOut,
-          ));
+          )) : null;
       }
       _pieces[index] = empty;
     }
