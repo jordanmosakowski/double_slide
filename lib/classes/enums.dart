@@ -30,3 +30,8 @@ extension SlideMoveIcon on SlideMove{
     }
   }
 }
+
+class Direction{
+  static final x = Vector3(1,0,0);
+  static final y = Vector3(0,1,0);
+}
