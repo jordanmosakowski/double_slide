@@ -128,7 +128,7 @@ class Puzzle {
       pieceToMove = piece;
       for(SlideMove m in moves){
         if(m == SlideMove.up){
-          moveOptions[i-4] = SlideMove.up;
+          moveOptions[i-size] = SlideMove.up;
         }
         else if(m == SlideMove.down){
           moveOptions[i+size] = SlideMove.down;
@@ -137,10 +137,9 @@ class Puzzle {
           moveOptions[i-1] = SlideMove.left;
         }
         else if(m == SlideMove.right){
-          moveOptions[i+size] = SlideMove.right;
+          moveOptions[i+1] = SlideMove.right;
         }
       }
     }
   }
-
 }

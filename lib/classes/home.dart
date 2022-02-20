@@ -79,11 +79,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Flutter Puzzle Hack'),
-      ),
       body: Column(
         children: [
+          Text('Flutter Puzzle Hack', style: Theme.of(context).textTheme.headline4,),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -105,87 +103,90 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
             ],
           ),
           Expanded(
-            child: Center(
-              child: LayoutBuilder(
-                builder: (context,BoxConstraints constraints) {
-                  int size = max(min(min(constraints.maxWidth.toInt(),
-                   constraints.maxHeight.toInt()),700),150);
-                  // int size = 500;
-                  double usableSize = size * 0.85;
-                  return SizedBox(
-                    width: size.toDouble(),
-                    height: size.toDouble(),
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          top: 0, left: 0, width: usableSize, height: usableSize,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.black,
-                              borderRadius: BorderRadius.all(Radius.circular(usableSize * 0.05)),
-                            ),
-                          )
-                        ),
-                        Positioned(
-                          top: usableSize,
-                          left: 0,
-                          width: usableSize,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              for(int i=0; i<puzzle.size; i++)
-                                MoveButton(
-                                  (){
-                                      puzzle.flipVertically(i);
-                                      _flipController.forward(from: 0.0);
-                                  },
-                                  Icons.south,
-                                  iconSize: min(80,usableSize / puzzle.size * 0.5),
-                                ),
-                            ]
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: LayoutBuilder(
+                  builder: (context,BoxConstraints constraints) {
+                    int size = max(min(min(constraints.maxWidth.toInt(),
+                     constraints.maxHeight.toInt()),700),150);
+                    // int size = 500;
+                    double usableSize = size * 0.85;
+                    return SizedBox(
+                      width: size.toDouble(),
+                      height: size.toDouble(),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            top: 0, left: 0, width: usableSize, height: usableSize,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.all(Radius.circular(usableSize * 0.05)),
+                              ),
+                            )
                           ),
-                        ),
-                        Positioned(
-                          left: usableSize,
-                          top: 0,
-                          height: usableSize,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              for(int i=0; i<puzzle.size; i++)
-                                MoveButton(
-                                  (){
-                                    puzzle.flipHorizontally(i);
-                                    _flipController.forward(from: 0.0);
-                                  },
-                                  Icons.east,
-                                  iconSize: min(80,usableSize / puzzle.size * 0.5),
-                                ),
-                            ],
-                          )
-                        ),
-                        Positioned(
-                          left: usableSize,
-                          top: usableSize,
-                          child: MoveButton(
-                              (){
-                                puzzle.flipAll();
-                                _flipController.forward(from: 0.0);
-                              },
-                              Icons.sync,
-                              iconSize: min(80,usableSize / puzzle.size * 0.5),
+                          Positioned(
+                            top: usableSize,
+                            left: 0,
+                            width: usableSize,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                for(int i=0; i<puzzle.size; i++)
+                                  MoveButton(
+                                    (){
+                                        puzzle.flipVertically(i);
+                                        _flipController.forward(from: 0.0);
+                                    },
+                                    Icons.south,
+                                    iconSize: min(80,usableSize / puzzle.size * 0.5),
+                                  ),
+                              ]
                             ),
-                        ),
-                        for(int i=0; i<puzzle.size * puzzle.size; i++)
-                          ...[
-                            buildPiece(true,i,usableSize),
-                            buildPiece(false,i,usableSize)
-                          ],
-                      ]
-                    )
-                  );
-                }
-              )
+                          ),
+                          Positioned(
+                            left: usableSize,
+                            top: 0,
+                            height: usableSize,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                for(int i=0; i<puzzle.size; i++)
+                                  MoveButton(
+                                    (){
+                                      puzzle.flipHorizontally(i);
+                                      _flipController.forward(from: 0.0);
+                                    },
+                                    Icons.east,
+                                    iconSize: min(80,usableSize / puzzle.size * 0.5),
+                                  ),
+                              ],
+                            )
+                          ),
+                          Positioned(
+                            left: usableSize,
+                            top: usableSize,
+                            child: MoveButton(
+                                (){
+                                  puzzle.flipAll();
+                                  _flipController.forward(from: 0.0);
+                                },
+                                Icons.sync,
+                                iconSize: min(80,usableSize / puzzle.size * 0.5),
+                              ),
+                          ),
+                          for(int i=0; i<puzzle.size * puzzle.size; i++)
+                            ...[
+                              buildPiece(true,i,usableSize),
+                              buildPiece(false,i,usableSize)
+                            ],
+                        ]
+                      )
+                    );
+                  }
+                )
+              ),
             ),
           ),
         ],

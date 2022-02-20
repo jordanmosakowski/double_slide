@@ -17,13 +17,23 @@ class App extends StatelessWidget {
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         textTheme: GoogleFonts.oxygenTextTheme(
-          Theme.of(context).textTheme,
+          Theme.of(context).textTheme.copyWith(
+            headline4: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            )
+          ),
         ),
       ),
       theme: ThemeData(
         primarySwatch: Colors.blue,
         textTheme: GoogleFonts.oxygenTextTheme(
-          Theme.of(context).textTheme,
+          Theme.of(context).textTheme.copyWith(
+            headline4: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            )
+          ),
         ),
       ),
       home: const Home(),
