@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:puzzle_hack/classes/enums.dart';
 import 'package:puzzle_hack/classes/face.dart';
@@ -10,8 +8,6 @@ class Puzzle {
   final int size;
   late PuzzleFace _front;
   late PuzzleFace _back;
-
-  Random _rand = Random();
 
   final AnimationController _controller;
   late Animation<double> _rotate;
