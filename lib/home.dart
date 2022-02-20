@@ -40,6 +40,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
   ));
 
   @override
+  void dispose() {
+    _flipController.dispose();
+    _slideController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState(){
     super.initState();
     puzzle = Puzzle(4,_flipController);

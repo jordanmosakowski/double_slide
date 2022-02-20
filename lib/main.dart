@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:puzzle_hack/home.dart';
+import 'package:puzzle_hack/welcome.dart';
 void main() {
   runApp(const App());
 }
@@ -14,17 +15,6 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Puzzle Hack',
       debugShowCheckedModeBanner: false,
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        textTheme: GoogleFonts.oxygenTextTheme(
-          Theme.of(context).textTheme.copyWith(
-            headline4: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            )
-          ),
-        ),
-      ),
       theme: ThemeData(
         primarySwatch: Colors.blue,
         textTheme: GoogleFonts.oxygenTextTheme(
@@ -36,7 +26,7 @@ class App extends StatelessWidget {
           ),
         ),
       ),
-      home: const Home(),
+      home: const Tutorial(),
     );
   }
 }
