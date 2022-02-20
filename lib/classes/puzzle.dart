@@ -64,6 +64,7 @@ class Puzzle {
         front.pieces[row * size + i],back.pieces[row * size + i]
       ]);
     }
+    clearMoveOptions();
   }
 
   void flipVertically(int col){
@@ -77,6 +78,7 @@ class Puzzle {
         front.pieces[i * size + col],back.pieces[(size-i-1) * size + (size-col-1)]
       ]);
     }
+    clearMoveOptions();
   }
   void flipAll(){
     late PuzzlePiece buffer;
@@ -89,6 +91,53 @@ class Puzzle {
         applyAnimation(_rotate, Direction.y, [
           front.pieces[row * size + i],back.pieces[row * size + i]
         ]);
+      }
+    }
+    clearMoveOptions();
+  }
+
+  List<SlideMove?> moveOptions = List.empty();
+  
+  PuzzlePiece? pieceToMove;
+
+  void clearMoveOptions(){
+    moveOptions = List.filled(size * size, null);
+  }
+
+  void pieceTap(PuzzleFace face, PuzzlePiece piece, int i, List<SlideMove> moves, AnimationController _slideController){
+    if(pieceToMove !=null && moveOptions[i]!=null){
+      clearAnimations();
+      face.movePiece(pieceToMove!,_slideController, moveOptions[i]!);
+      clearMoveOptions();
+      _slideController.forward(from: 0.0);
+      pieceToMove = null;
+    }
+    else if(pieceToMove == piece){
+      clearMoveOptions();
+      pieceToMove = null;
+    }
+    else if(moves.length == 1){
+      clearMoveOptions();
+      clearAnimations();
+      pieceToMove = null;
+      face.movePiece(piece, _slideController, moves.first);
+      _slideController.forward(from: 0.0);
+    }
+    else{
+      pieceToMove = piece;
+      for(SlideMove m in moves){
+        if(m == SlideMove.up){
+          moveOptions[i-4] = SlideMove.up;
+        }
+        else if(m == SlideMove.down){
+          moveOptions[i+4] = SlideMove.down;
+        }
+        else if(m == SlideMove.left){
+          moveOptions[i-1] = SlideMove.left;
+        }
+        else if(m == SlideMove.right){
+          moveOptions[i+1] = SlideMove.right;
+        }
       }
     }
   }

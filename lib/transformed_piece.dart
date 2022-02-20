@@ -17,6 +17,7 @@ class TransformedPiece extends StatelessWidget {
     required this.slideNone,
     required this.move,
     required this.onTap,
+    required this.faceSize,
     Key? key }) : super(key: key);
   final PuzzleFace face;
   final bool isFront;
@@ -25,9 +26,9 @@ class TransformedPiece extends StatelessWidget {
   final Animation<Offset> slideNone;
   final VoidCallback? onTap;
   final SlideMove? move;
+  final double faceSize;
 
   Matrix4 getPieceRotation(PuzzleFace face, int index){
-    const double faceSize = 400;
     final double pieceSize = faceSize / puzzleSize;
     double pieceX = (index % puzzleSize) * pieceSize + pieceSize/2 - faceSize/2;
     double pieceY = (index/puzzleSize).floor() * pieceSize + pieceSize/2 - faceSize/2;
@@ -36,7 +37,7 @@ class TransformedPiece extends StatelessWidget {
     double pieceAnim = piece.rotateAnimation?.value.toDouble() ?? 0.0;
 
     Matrix4 translate1 = Matrix4.translation(vec.Vector3(pieceX, pieceY,0));
-    Matrix4 translate2 = Matrix4.translation(vec.Vector3(150, 150, 0));
+    Matrix4 translate2 = Matrix4.translation(vec.Vector3(faceSize/2 - pieceSize/2, faceSize/2 - pieceSize/2, 0));
     Matrix4 rotateY = Matrix4.identity()..rotate(vec.Vector3(0,1,0), (isFront ? 0 : 180) * pi / 180);
     Matrix4 rotateFlip = Matrix4.identity()..rotate(piece.direction, pieceAnim * pi / 180);
 
@@ -62,16 +63,17 @@ class TransformedPiece extends StatelessWidget {
       child: SlideTransition(
         position: piece.slideAnimation ?? slideNone,
         child: SizedBox(
-          width: 400 / puzzleSize,
-          height: 400 / puzzleSize,
+          width: faceSize / puzzleSize,
+          height: faceSize / puzzleSize,
           child: Padding(
-            padding: const EdgeInsets.all(7.0),
+            padding: EdgeInsets.all(faceSize / puzzleSize * 0.08),
             child: InkWell(
               onTap: onTap,
               child: PieceWidget(
                 piece,
                 flipText: flipText,
                 move: move,
+                pieceSize: faceSize / puzzleSize,
               )
             ),
           ),

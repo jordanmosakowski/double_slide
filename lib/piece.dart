@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:puzzle_hack/classes/enums.dart';
 import 'package:puzzle_hack/classes/piece.dart';
@@ -10,12 +9,14 @@ class PieceWidget extends StatelessWidget {
     { 
       Key? key,
       required this.flipText,
-      required this.move 
+      required this.move,
+      required this.pieceSize
     }) : super(key: key);
 
   final PuzzlePiece piece;
   final bool flipText;
   final SlideMove? move;
+  final double pieceSize;
 
   Color getColor(PuzzlePiece piece) {
     switch (piece.color) {
@@ -32,12 +33,12 @@ class PieceWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(pieceSize * 0.2),
         color: getColor(piece),
       ),
       child: move != null ? Icon(
           move!.icon,
-          size: 45,
+          size: pieceSize * 0.4,
           color: piece.color == PuzzleColor.empty ? Colors.white : Colors.black,
         ) : (piece.color != PuzzleColor.empty
       ? Center(
@@ -46,10 +47,10 @@ class PieceWidget extends StatelessWidget {
           alignment: FractionalOffset.center,
           child: Text(
             piece.value.toString(),
-            style: const TextStyle(
+            style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
-              fontSize: 55
+              fontSize: pieceSize * 0.5
             ),
           )
         ),
