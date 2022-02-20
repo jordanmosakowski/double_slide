@@ -142,4 +142,22 @@ class Puzzle {
       }
     }
   }
+
+  bool isSolved(){
+    for(int i=0; i<size * size; i++){
+      if(i==size*size-1){
+        if(front.pieces[i].color != PuzzleColor.empty || back.pieces[i].color != PuzzleColor.empty){
+          return false;
+        }
+        continue;
+      }
+      if(front.pieces[i].value != i+1 || front.pieces[i].color != front.pieces.first.color){
+        return false;
+      }
+      if(back.pieces[i].value != i+1 || back.pieces[i].color != back.pieces.first.color){
+        return false;
+      }
+    }
+    return true;
+  }
 }

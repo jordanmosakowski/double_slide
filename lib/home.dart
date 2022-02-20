@@ -102,6 +102,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
                 )
             ],
           ),
+          Text(puzzle.isSolved() ? "Solved" : "Not solved"),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),

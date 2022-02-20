@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:puzzle_hack/classes/home.dart';
+import 'package:puzzle_hack/home.dart';
 void main() {
   runApp(const App());
 }
@@ -30,7 +30,7 @@ class App extends StatelessWidget {
         textTheme: GoogleFonts.oxygenTextTheme(
           Theme.of(context).textTheme.copyWith(
             headline4: const TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontWeight: FontWeight.bold,
             )
           ),
