@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:puzzle_hack/classes/enums.dart';
 import 'package:puzzle_hack/classes/face.dart';
 import 'package:puzzle_hack/classes/piece.dart';
@@ -19,8 +20,15 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Puzzle Hack',
+      debugShowCheckedModeBanner: false,
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+      ),
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        textTheme: GoogleFonts.oxygenTextTheme(
+          Theme.of(context).textTheme, // If this is not set, then ThemeData.light().textTheme is used.
+        ),
       ),
       home: const Home(),
     );
@@ -36,8 +44,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with TickerProviderStateMixin{
   late Puzzle puzzle = Puzzle(4,_flipController);
-
-
 
   late final AnimationController _slideController = AnimationController(
     vsync: this,
@@ -203,7 +209,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
                       width: 400 / puzzle.size,
                       height: 400 / puzzle.size,
                       child: Padding(
-                        padding: const EdgeInsets.all(4.0),
+                        padding: const EdgeInsets.all(7.0),
                         child: InkWell(
                           onTap: (((pieceToMove==null || pieceToMove == piece) && moves.isNotEmpty) || moveOptions[i] !=null) ? (){
                             setState((){
@@ -260,7 +266,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
                                     child: Transform.rotate(
                                       angle: flipText ? (pi) : 0,
                                       alignment: FractionalOffset.center,
-                                      child: Text(piece.value.toString())
+                                      child: Text(
+                                        piece.value.toString(),
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 55
+                                          ),
+                                      )
                                     ),
                                 ) : null),
                           ),
