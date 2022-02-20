@@ -16,11 +16,14 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       darkTheme: ThemeData(
         brightness: Brightness.dark,
+        textTheme: GoogleFonts.oxygenTextTheme(
+          Theme.of(context).textTheme,
+        ),
       ),
       theme: ThemeData(
         primarySwatch: Colors.blue,
         textTheme: GoogleFonts.oxygenTextTheme(
-          Theme.of(context).textTheme, // If this is not set, then ThemeData.light().textTheme is used.
+          Theme.of(context).textTheme,
         ),
       ),
       home: const Home(),

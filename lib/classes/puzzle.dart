@@ -16,6 +16,7 @@ class Puzzle {
   Puzzle(this.size,this._controller){
     _front = PuzzleFace(size,PuzzleColor.front);
     _back = PuzzleFace(size,PuzzleColor.back);
+    clearMoveOptions();
 
     _rotate = Tween<double>(
       begin: -180.0,
@@ -130,13 +131,13 @@ class Puzzle {
           moveOptions[i-4] = SlideMove.up;
         }
         else if(m == SlideMove.down){
-          moveOptions[i+4] = SlideMove.down;
+          moveOptions[i+size] = SlideMove.down;
         }
         else if(m == SlideMove.left){
           moveOptions[i-1] = SlideMove.left;
         }
         else if(m == SlideMove.right){
-          moveOptions[i+1] = SlideMove.right;
+          moveOptions[i+size] = SlideMove.right;
         }
       }
     }
