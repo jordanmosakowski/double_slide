@@ -40,6 +40,9 @@ class SizeIconsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SharedPreferences? prefs = context.watch<SharedPreferences?>();
+    if(prefs == null) {
+      return Container();
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -52,7 +55,7 @@ class SizeIconsWidget extends StatelessWidget {
                 child: Column(
                   children: [
                     Icon(sizeIcons[i],size: 60,),
-                    Text("Best: "+(prefs?.getInt("pb${i+2}")?.toString() ?? "N/A"))
+                    Text("Best: "+(prefs.getInt("pb${i+2}")?.toString() ?? "N/A"))
                   ],
                 ),
                 onTap: (){

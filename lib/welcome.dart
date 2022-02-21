@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:puzzle_hack/home.dart';
 import 'package:rive/rive.dart';
 
 class WelcomePage extends StatefulWidget {

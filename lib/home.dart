@@ -52,7 +52,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
   @override
   void initState(){
     super.initState();
-    puzzle = Puzzle(4,_flipController);
+    puzzle = Puzzle(0,_flipController);
     puzzle.shuffle();
     puzzle.clearMoveOptions();
     loadWelcome();
@@ -73,6 +73,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
       prefs.setBool('hasShownWelcome', true);
       setState(() {
         showWelcome = true;
+      });
+    }
+    else{
+      setState(() {
+        puzzle = Puzzle.fromSave(prefs, _flipController);
       });
     }
   }
@@ -106,6 +111,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
       if(puzzle.moves < best || best == -1){
         prefs.setInt('pb${puzzle.size}', puzzle.moves);
       }
+    }
+    if(prefs!=null && puzzle.prefs == null){
+      puzzle.prefs = prefs;
     }
     return Scaffold(
       body: SafeArea(
@@ -160,25 +168,26 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
               ),
               SizeIconsWidget(puzzle.size, (newSize){
                   setState(() {
-                    puzzle = Puzzle(newSize,_flipController);
-                    puzzle.shuffle();
+                    SharedPreferences? prefs = context.read<SharedPreferences?>();
+                    if(prefs==null){
+                      puzzle = Puzzle(newSize,_flipController);
+                      puzzle.shuffle();
+                    }
+                    else{
+                      prefs.setInt("current_size",newSize);
+                      puzzle = Puzzle.fromSaveSize(newSize,prefs, _flipController);
+                    }
                   });
                 },
               ),
               Text("Moves: ${puzzle.moves}", style: Theme.of(context).textTheme.headline5),
-              AbsorbPointer(
-                absorbing: !puzzle.isSolved(),
-                child: Opacity(
-                  opacity: puzzle.isSolved() ? 1 : 0,
-                  child: ElevatedButton(
-                    onPressed: (){
-                      setState(() {
-                        puzzle.shuffle();
-                      });
-                    }, 
-                    child: Text("Shuffle")
-                  ),
-                ),
+              ElevatedButton(
+                onPressed: (){
+                  setState(() {
+                    puzzle.shuffle();
+                  });
+                }, 
+                child: Text("Shuffle")
               ),
               Expanded(
                 child: AbsorbPointer(

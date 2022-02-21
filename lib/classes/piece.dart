@@ -13,4 +13,14 @@ class PuzzlePiece {
 
   int get value => _value;
   PuzzleColor get color => _color;
+
+  factory PuzzlePiece.fromString(String str){
+    if(str.contains("f")){
+      return PuzzlePiece(PuzzleColor.front,int.parse(str.substring(1)));
+    }
+    if(str.contains("b")){
+      return PuzzlePiece(PuzzleColor.back,int.parse(str.substring(1)));
+    }
+      return PuzzlePiece(PuzzleColor.empty,0);
+  }
 }

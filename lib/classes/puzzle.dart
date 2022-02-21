@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:puzzle_hack/classes/enums.dart';
 import 'package:puzzle_hack/classes/face.dart';
 import 'package:puzzle_hack/classes/piece.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 class Puzzle {
@@ -12,6 +13,7 @@ class Puzzle {
   final AnimationController _controller;
   late Animation<double> _rotate;
 
+  SharedPreferences? prefs;
 
   int _moves = 0;
 
@@ -36,6 +38,7 @@ class Puzzle {
       back.pieces[i] = pieces[i+pieces.length~/2];
     }
     _moves = 0;
+    saveState();
   }
 
   void clearAnimations(){
@@ -71,6 +74,7 @@ class Puzzle {
       ]);
     }
     _moves++;
+    saveState();
     clearMoveOptions();
   }
 
@@ -86,6 +90,7 @@ class Puzzle {
       ]);
     }
     _moves++;
+    saveState();
     clearMoveOptions();
   }
   void flipAll(){
@@ -118,6 +123,7 @@ class Puzzle {
       clearAnimations();
       face.movePiece(pieceToMove!,_slideController, moveOptions[i]!);
       _moves++;
+      saveState();
       clearMoveOptions();
       _slideController.forward(from: 0.0);
       pieceToMove = null;
@@ -132,6 +138,7 @@ class Puzzle {
       pieceToMove = null;
       face.movePiece(piece, _slideController, moves.first);
       _moves++;
+      saveState();
       _slideController.forward(from: 0.0);
     }
     else{
@@ -169,5 +176,75 @@ class Puzzle {
       }
     }
     return true;
+  }
+
+  void saveState(){
+    if(prefs==null){
+      return;
+    }
+    prefs!.setInt("current_size",size);
+    prefs!.setBool("save_$size",true);
+    prefs!.setInt("save_moves_$size",_moves);
+    List<String> frontState = front.pieces.map((PuzzlePiece p){
+      if(p.color == PuzzleColor.empty){
+        return "e";
+      }
+      return (p.color == PuzzleColor.front ? "f" : "b")+p.value.toString();
+    }).toList();
+    prefs!.setStringList("save_front_$size",frontState);
+    List<String> backState = back.pieces.map((PuzzlePiece p){
+      if(p.color == PuzzleColor.empty){
+        return "e";
+      }
+      return (p.color == PuzzleColor.front ? "f" : "b")+p.value.toString();
+    }).toList();
+    prefs!.setStringList("save_back_$size",backState);
+  }
+
+  factory Puzzle.fromSave(SharedPreferences prefs, AnimationController controller){
+    int? size = prefs.getInt("current_size");
+    if(size == null){
+      return Puzzle.standard(4,prefs,controller);
+    }
+    return Puzzle.fromSaveSize(size, prefs, controller);
+  }
+
+  factory Puzzle.fromSaveSize(int size, SharedPreferences prefs, AnimationController controller){
+    if(prefs.getBool("save_$size") == null){
+      return Puzzle.standard(size,prefs,controller);
+    }
+    int moves = prefs.getInt("save_moves_$size") ?? 0;
+    List<String> frontState = prefs.getStringList("save_front_$size") ?? List.filled(size*size,"e");
+    List<String> backState = prefs.getStringList("save_back_$size") ?? List.filled(size*size,"e");
+    if(frontState.length != size*size || backState.length != size*size){
+      return Puzzle.standard(size,prefs,controller);
+    }
+    Puzzle puzzle = Puzzle(size,controller);
+    puzzle.prefs = prefs;
+    puzzle._moves = moves;
+    for(int i=0; i<size*size; i++){
+      PuzzlePiece frontPiece = PuzzlePiece.fromString(frontState[i]);
+      PuzzlePiece backPiece = PuzzlePiece.fromString(backState[i]);
+      puzzle.front.pieces[i] = frontPiece;
+      puzzle.back.pieces[i] = backPiece;
+    }
+    return puzzle;
+  }
+
+  void destroySave(){
+    if(prefs==null){
+      return;
+    }
+    prefs!.remove("save_size_$size");
+    prefs!.remove("save_moves_$size");
+    prefs!.remove("save_front_$size");
+    prefs!.remove("save_back_$size");
+  }
+
+  factory Puzzle.standard(int size, SharedPreferences prefs,AnimationController controller){
+    Puzzle p = Puzzle(size,controller);
+      p.prefs = prefs;
+      p.shuffle();
+      return p;
   }
 }
