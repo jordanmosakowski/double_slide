@@ -44,7 +44,6 @@ late final AnimationController squishController = AnimationController(
     super.initState();
     frontController.addListener(() { setState(() { frontValue = frontController.value; }); });
     backController.addListener(() { setState(() { backValue = backController.value; }); });
-    squishController.repeat();
   }
 
   @override
@@ -160,6 +159,8 @@ late final AnimationController squishController = AnimationController(
                         onPressed: () {
                           setState(() {
                             page++;
+                            squishController.reset();
+                            squishController.repeat();
                           });
                         },
                       ),

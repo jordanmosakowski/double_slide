@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:puzzle_hack/home.dart';
-import 'package:puzzle_hack/welcome.dart';
 void main() {
   runApp(const App());
 }

@@ -11,8 +11,12 @@ class Puzzle {
 
   final AnimationController _controller;
   late Animation<double> _rotate;
-  
 
+
+  int _moves = 0;
+
+  int get moves => _moves;
+  
   Puzzle(this.size,this._controller){
     _front = PuzzleFace(size,PuzzleColor.front);
     _back = PuzzleFace(size,PuzzleColor.back);
@@ -31,6 +35,7 @@ class Puzzle {
       front.pieces[i] = pieces[i];
       back.pieces[i] = pieces[i+pieces.length~/2];
     }
+    _moves = 0;
   }
 
   void clearAnimations(){
@@ -65,6 +70,7 @@ class Puzzle {
         front.pieces[row * size + i],back.pieces[row * size + i]
       ]);
     }
+    _moves++;
     clearMoveOptions();
   }
 
@@ -79,6 +85,7 @@ class Puzzle {
         front.pieces[i * size + col],back.pieces[(size-i-1) * size + (size-col-1)]
       ]);
     }
+    _moves++;
     clearMoveOptions();
   }
   void flipAll(){
@@ -109,6 +116,7 @@ class Puzzle {
     if(pieceToMove !=null && moveOptions[i]!=null){
       clearAnimations();
       face.movePiece(pieceToMove!,_slideController, moveOptions[i]!);
+      _moves++;
       clearMoveOptions();
       _slideController.forward(from: 0.0);
       pieceToMove = null;
@@ -122,6 +130,7 @@ class Puzzle {
       clearAnimations();
       pieceToMove = null;
       face.movePiece(piece, _slideController, moves.first);
+      _moves++;
       _slideController.forward(from: 0.0);
     }
     else{
