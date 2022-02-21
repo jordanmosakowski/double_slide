@@ -69,17 +69,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
     final prefs = await SharedPreferences.getInstance();
     // prefs.setBool('hasShownWelcome', false);
     bool hasShownWelcome = prefs.getBool('hasShownWelcome') ?? false;
+    setState(() {
     if(!hasShownWelcome){
       prefs.setBool('hasShownWelcome', true);
-      setState(() {
-        showWelcome = true;
-      });
+      showWelcome = true;
     }
-    else{
-      setState(() {
-        puzzle = Puzzle.fromSave(prefs, _flipController);
-      });
-    }
+      puzzle = Puzzle.fromSave(prefs, _flipController);
+    });
   }
 
   Widget buildPiece(bool isFront, int i, double faceSize){
