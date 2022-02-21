@@ -49,7 +49,7 @@ flutter_icons:
   android: "launcher_icon"
   ios: true
   remove_alpha_ios: true
-  image_path: "assets/logo_black.png"
+  image_path: "assets/logo_black_large.png"
 
 
   flutter_lints: ^1.0.0
