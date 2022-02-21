@@ -102,8 +102,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
   Widget build(BuildContext context) {
     SharedPreferences? prefs = context.watch<SharedPreferences?>();
     if(prefs!=null && puzzle.isSolved()){
-      int best = prefs.getInt('pb${puzzle.size}') ?? 0;
-      if(puzzle.moves < best){
+      int best = prefs.getInt('pb${puzzle.size}') ?? -1;
+      if(puzzle.moves < best || best == -1){
         prefs.setInt('pb${puzzle.size}', puzzle.moves);
       }
     }
@@ -165,23 +165,20 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
                   });
                 },
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text("Moves: ${puzzle.moves}", style: Theme.of(context).textTheme.headline5),
-                  if(puzzle.isSolved())
-                    Container(width: 10),
-                  if(puzzle.isSolved())
-                    ElevatedButton(
-                      onPressed: (){
-                        setState(() {
-                          puzzle.shuffle();
-                        });
-                      }, 
-                      child: Text("Shuffle")
-                    )
-                ],
+              Text("Moves: ${puzzle.moves}", style: Theme.of(context).textTheme.headline5),
+              AbsorbPointer(
+                absorbing: !puzzle.isSolved(),
+                child: Opacity(
+                  opacity: puzzle.isSolved() ? 1 : 0,
+                  child: ElevatedButton(
+                    onPressed: (){
+                      setState(() {
+                        puzzle.shuffle();
+                      });
+                    }, 
+                    child: Text("Shuffle")
+                  ),
+                ),
               ),
               Expanded(
                 child: AbsorbPointer(
