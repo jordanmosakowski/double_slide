@@ -13,20 +13,23 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Puzzle Hack',
+      title: 'Double Slide',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
+      darkTheme: ThemeData(
         primarySwatch: Colors.blue,
+        brightness: Brightness.dark,
         textTheme: GoogleFonts.oxygenTextTheme(
-          Theme.of(context).textTheme.copyWith(
-            headline4: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            )
-          ),
+          ThemeData(brightness: Brightness.dark).textTheme
         ),
       ),
-      home: const Tutorial(),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        brightness: Brightness.light,
+        textTheme: GoogleFonts.oxygenTextTheme(
+          ThemeData(brightness: Brightness.light).textTheme
+        ),
+      ),
+      home: const Home(),
     );
   }
 }
