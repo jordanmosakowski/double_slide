@@ -12,7 +12,9 @@
 ///
 /// 
 ///
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SizeIcons {
   SizeIcons._();
@@ -25,4 +27,42 @@ class SizeIcons {
   static const IconData size5 = IconData(0xe809, fontFamily: fontFamily);
   static const IconData size6 = IconData(0xe80b, fontFamily: fontFamily);
   static const IconData size7 = IconData(0xe80c, fontFamily: fontFamily);
+}
+
+class SizeIconsWidget extends StatelessWidget {
+  SizeIconsWidget(this.currentSize,this.onPressed,{ Key? key }) : super(key: key);
+  final int currentSize;
+  final Function(int newSize) onPressed;
+
+  final List<IconData> sizeIcons = [SizeIcons.size2,SizeIcons.size3,SizeIcons.size4,
+    SizeIcons.size5,SizeIcons.size6];
+
+  @override
+  Widget build(BuildContext context) {
+    SharedPreferences? prefs = context.watch<SharedPreferences?>();
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        for(int i=0; i<sizeIcons.length; i++)
+          Opacity(
+            opacity: i+2 == currentSize ? 1.0 : 0.5,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: InkWell(
+                child: Column(
+                  children: [
+                    Icon(sizeIcons[i],size: 60,),
+                    Text("Best: "+(prefs?.getInt("pb${i+2}")?.toString() ?? "N/A"))
+                  ],
+                ),
+                onTap: (){
+                  if(i+2 != currentSize)
+                    onPressed(i+2);
+                },
+              ),
+            )
+          )
+      ],
+    );
+  }
 }

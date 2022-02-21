@@ -110,6 +110,7 @@ class Puzzle {
 
   void clearMoveOptions(){
     moveOptions = List.filled(size * size, null);
+      pieceToMove = null;
   }
 
   void pieceTap(PuzzleFace face, PuzzlePiece piece, int i, List<SlideMove> moves, AnimationController _slideController){

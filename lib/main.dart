@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:puzzle_hack/home.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   runApp(const App());
 }
@@ -28,7 +30,11 @@ class App extends StatelessWidget {
           ThemeData(brightness: Brightness.light).textTheme
         ),
       ),
-      home: const Home(),
+      home: FutureProvider<SharedPreferences?>(
+        create: (_) => SharedPreferences.getInstance(),
+        initialData: null,
+        child: const Home()
+      ),
     );
   }
 }

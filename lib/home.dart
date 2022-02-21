@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:puzzle_hack/classes/enums.dart';
 import 'package:puzzle_hack/classes/face.dart';
 import 'package:puzzle_hack/classes/piece.dart';
@@ -96,12 +97,16 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
       } : null,
     );
   }
-
-  List<IconData> sizeIcons = [SizeIcons.size2,SizeIcons.size3,SizeIcons.size4,
-    SizeIcons.size5,SizeIcons.size6];
   
   @override
   Widget build(BuildContext context) {
+    SharedPreferences? prefs = context.watch<SharedPreferences?>();
+    if(prefs!=null && puzzle.isSolved()){
+      int best = prefs.getInt('pb${puzzle.size}') ?? 0;
+      if(puzzle.moves < best){
+        prefs.setInt('pb${puzzle.size}', puzzle.moves);
+      }
+    }
     return Scaffold(
       body: SafeArea(
         child: AnimatedSwitcher(
@@ -153,25 +158,12 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
                   ),
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for(int i=0; i<sizeIcons.length; i++)
-                    Opacity(
-                      opacity: i+2 == puzzle.size ? 1.0 : 0.5,
-                      child: IconButton(
-                        tooltip: "${i+2}x${i+2} Puzzle",
-                        iconSize: 50,
-                        icon: Icon(sizeIcons[i]),
-                        onPressed: (){
-                          setState(() {
-                            puzzle = Puzzle(i+2,_flipController);
-                            puzzle.shuffle();
-                          });
-                        },
-                      ),
-                    )
-                ],
+              SizeIconsWidget(puzzle.size, (newSize){
+                  setState(() {
+                    puzzle = Puzzle(newSize,_flipController);
+                    puzzle.shuffle();
+                  });
+                },
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -232,6 +224,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
                                           },
                                           Icons.south,
                                           iconSize: min(40,usableSize / puzzle.size * 0.5),
+                                          tooltip: "Flip Column ${i+1}",
                                         ),
                                     ]
                                   ),
@@ -251,6 +244,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
                                           },
                                           Icons.east,
                                           iconSize: min(40,usableSize / puzzle.size * 0.5),
+                                          tooltip: "Flow Row ${i+1}",
                                         ),
                                     ],
                                   )
@@ -265,6 +259,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
                                       },
                                       Icons.sync,
                                       iconSize: min(40,usableSize / puzzle.size * 0.5),
+                                      tooltip: "Flip Puzzle"
                                     ),
                                 ),
                                 for(int i=0; i<puzzle.size * puzzle.size; i++)
