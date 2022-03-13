@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(puzzle_hack LANGUAGES CXX)
+project(double_slide LANGUAGES CXX)
 
-set(BINARY_NAME "puzzle_hack")
+set(BINARY_NAME "double_slide")
 
 cmake_policy(SET CMP0063 NEW)
 

@@ -1,4 +1,4 @@
-package com.example.puzzle_hack
+package com.example.double_slide
 
 import io.flutter.embedding.android.FlutterActivity
 

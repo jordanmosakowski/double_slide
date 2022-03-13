@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
-set(BINARY_NAME "puzzle_hack")
-set(APPLICATION_ID "com.example.puzzle_hack")
+set(BINARY_NAME "double_slide")
+set(APPLICATION_ID "com.example.double_slide")
 
 cmake_policy(SET CMP0063 NEW)
 

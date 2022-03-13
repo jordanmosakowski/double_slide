@@ -1,6 +1,6 @@
 import 'package:flutter/animation.dart';
 import 'package:flutter/rendering.dart';
-import 'package:puzzle_hack/classes/enums.dart';
+import 'package:double_slide/classes/enums.dart';
 import 'package:vector_math/vector_math_64.dart';
 
 class PuzzlePiece {

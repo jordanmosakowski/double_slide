@@ -1,6 +1,6 @@
 {
-    "name": "puzzle_hack",
-    "short_name": "puzzle_hack",
+    "name": "double_slide",
+    "short_name": "double_slide",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:puzzle_hack/classes/enums.dart';
-import 'package:puzzle_hack/classes/piece.dart';
+import 'package:double_slide/classes/enums.dart';
+import 'package:double_slide/classes/piece.dart';
 
 class PieceWidget extends StatelessWidget {
   const PieceWidget(

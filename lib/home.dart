@@ -2,14 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:puzzle_hack/classes/enums.dart';
-import 'package:puzzle_hack/classes/face.dart';
-import 'package:puzzle_hack/classes/piece.dart';
-import 'package:puzzle_hack/classes/puzzle.dart';
-import 'package:puzzle_hack/move_button.dart';
-import 'package:puzzle_hack/size_icons.dart';
-import 'package:puzzle_hack/transformed_piece.dart';
-import 'package:puzzle_hack/welcome.dart';
+import 'package:double_slide/classes/enums.dart';
+import 'package:double_slide/classes/face.dart';
+import 'package:double_slide/classes/piece.dart';
+import 'package:double_slide/classes/puzzle.dart';
+import 'package:double_slide/move_button.dart';
+import 'package:double_slide/size_icons.dart';
+import 'package:double_slide/transformed_piece.dart';
+import 'package:double_slide/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
