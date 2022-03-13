@@ -34,6 +34,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
     setState(() {});
   });
 
+  late final AnimationController completeController = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 250),
+  );
+
+  late Animation<double> completeAnimation = Tween<double>(
+      begin: 1.0,
+      end: 1.15,
+    ).animate(CurvedAnimation(
+      parent: completeController,
+    curve: Curves.easeInOut,
+    ));
+
   late final Animation<Offset> _slideNone = Tween<Offset>(
     begin: Offset.zero,
     end: Offset.zero,
@@ -59,6 +72,14 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
     _slideController.addStatusListener((status) { 
       if (status == AnimationStatus.completed) {
         puzzle.clearAnimations();
+      }
+    });
+
+    completeController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        if(completeController.value == 1.0){
+          completeController.reverse();
+        }
       }
     });
   }
@@ -98,9 +119,18 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
       } : null,
     );
   }
+
+  bool playedComplete = true;
   
   @override
   Widget build(BuildContext context) {
+    if(puzzle.isSolved() && !playedComplete){
+      playedComplete = true;
+      completeController.forward();
+    }
+    if(!puzzle.isSolved()){
+      playedComplete = false;
+    }
     SharedPreferences? prefs = context.watch<SharedPreferences?>();
     if(prefs!=null && puzzle.isSolved()){
       int best = prefs.getInt('pb${puzzle.size}') ?? -1;
@@ -190,90 +220,93 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
                   absorbing: puzzle.isSolved(),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                      child: LayoutBuilder(
-                        builder: (context,BoxConstraints constraints) {
-                          int size = max(min(min(constraints.maxWidth.toInt(),
-                           constraints.maxHeight.toInt()),700),150);
-                          // int size = 500;
-                          double usableSize = size * 0.85;
-                          return SizedBox(
-                            width: size.toDouble(),
-                            height: size.toDouble(),
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                  top: 0, left: 0, width: usableSize, height: usableSize,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.black,
-                                      borderRadius: BorderRadius.all(Radius.circular(usableSize * 0.05)),
-                                    ),
-                                  )
-                                ),
-                                Positioned(
-                                  top: usableSize,
-                                  left: 0,
-                                  width: usableSize,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: [
-                                      for(int i=0; i<puzzle.size; i++)
-                                        MoveButton(
-                                          (){
-                                              puzzle.flipVertically(i);
-                                              _flipController.forward(from: 0.0);
-                                          },
-                                          Icons.south,
-                                          iconSize: min(40,usableSize / puzzle.size * 0.5),
-                                          tooltip: "Flip Column ${i+1}",
-                                        ),
-                                    ]
+                    child: ScaleTransition(
+                      scale: completeAnimation,
+                      child: Center(
+                        child: LayoutBuilder(
+                          builder: (context,BoxConstraints constraints) {
+                            int size = max(min(min(constraints.maxWidth.toInt(),
+                             constraints.maxHeight.toInt()),700),150);
+                            // int size = 500;
+                            double usableSize = size * 0.85;
+                            return SizedBox(
+                              width: size.toDouble(),
+                              height: size.toDouble(),
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    top: 0, left: 0, width: usableSize, height: usableSize,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.black,
+                                        borderRadius: BorderRadius.all(Radius.circular(usableSize * 0.05)),
+                                      ),
+                                    )
                                   ),
-                                ),
-                                Positioned(
-                                  left: usableSize,
-                                  top: 0,
-                                  height: usableSize,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: [
-                                      for(int i=0; i<puzzle.size; i++)
-                                        MoveButton(
-                                          (){
-                                            puzzle.flipHorizontally(i);
-                                            _flipController.forward(from: 0.0);
-                                          },
-                                          Icons.east,
-                                          iconSize: min(40,usableSize / puzzle.size * 0.5),
-                                          tooltip: "Flow Row ${i+1}",
-                                        ),
-                                    ],
-                                  )
-                                ),
-                                Positioned(
-                                  left: usableSize,
-                                  top: usableSize,
-                                  child: MoveButton(
-                                      (){
-                                        puzzle.flipAll();
-                                        _flipController.forward(from: 0.0);
-                                      },
-                                      Icons.sync,
-                                      iconSize: min(40,usableSize / puzzle.size * 0.5),
-                                      tooltip: "Flip Puzzle"
+                                  Positioned(
+                                    top: usableSize,
+                                    left: 0,
+                                    width: usableSize,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: [
+                                        for(int i=0; i<puzzle.size; i++)
+                                          MoveButton(
+                                            (){
+                                                puzzle.flipVertically(i);
+                                                _flipController.forward(from: 0.0);
+                                            },
+                                            Icons.south,
+                                            iconSize: min(40,usableSize / puzzle.size * 0.5),
+                                            tooltip: "Flip Column ${i+1}",
+                                          ),
+                                      ]
                                     ),
-                                ),
-                                for(int i=0; i<puzzle.size * puzzle.size; i++)
-                                  ...[
-                                    buildPiece(true,i,usableSize),
-                                    buildPiece(false,i,usableSize)
-                                  ],
-                              ]
-                            )
-                          );
-                        }
-                      )
+                                  ),
+                                  Positioned(
+                                    left: usableSize,
+                                    top: 0,
+                                    height: usableSize,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: [
+                                        for(int i=0; i<puzzle.size; i++)
+                                          MoveButton(
+                                            (){
+                                              puzzle.flipHorizontally(i);
+                                              _flipController.forward(from: 0.0);
+                                            },
+                                            Icons.east,
+                                            iconSize: min(40,usableSize / puzzle.size * 0.5),
+                                            tooltip: "Flow Row ${i+1}",
+                                          ),
+                                      ],
+                                    )
+                                  ),
+                                  Positioned(
+                                    left: usableSize,
+                                    top: usableSize,
+                                    child: MoveButton(
+                                        (){
+                                          puzzle.flipAll();
+                                          _flipController.forward(from: 0.0);
+                                        },
+                                        Icons.sync,
+                                        iconSize: min(40,usableSize / puzzle.size * 0.5),
+                                        tooltip: "Flip Puzzle"
+                                      ),
+                                  ),
+                                  for(int i=0; i<puzzle.size * puzzle.size; i++)
+                                    ...[
+                                      buildPiece(true,i,usableSize),
+                                      buildPiece(false,i,usableSize)
+                                    ],
+                                ]
+                              )
+                            );
+                          }
+                        )
+                      ),
                     ),
                   ),
                 ),
