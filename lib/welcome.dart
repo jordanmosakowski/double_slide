@@ -69,11 +69,11 @@ late final AnimationController squishController = AnimationController(
             if(page == 0)
               const Center(child: Text("Like the original puzzle, you can slide tiles around using the empty square as a buffer\n")),
             if(page == 1)
-              const Center(child: Text("You can also rotate a row or column to swap tiles between each side of the puzzle")),
+              const Center(child: Text("You can also flip a row or column to swap tiles between each side of the puzzle")),
             if(page == 1)
               const Center(child: Text("Because of this, it is possible to have two empty squares on one side of the puzzle, and none on the other side")),
             if(page == 2)
-              const Center(child: Text("The goal is to place the numbers 1-15 in order on each side of the puzzle\n")),
+              const Center(child: Text("The goal is to place the numbers in order on each side of the puzzle\n")),
             Container(height: 10),
             if(page == 0)
               const Center(

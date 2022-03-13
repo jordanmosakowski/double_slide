@@ -1,16 +1,10 @@
-# double_slide
+# Double Slide
 
-A new Flutter project.
+## Overview
+Double Slide is a multi-platform slide puzzle game. There are two sides of the puzzle, with tiles from each side colored blue and green. Like the original puzzle, you can slide tiles around using the empty square as a buffer. You can also flip a row or column to swap tiles between each side of the puzzle. Because of this, it is possible to have two empty squares on one side of the puzzle, and none on the other side. The goal is to place the numbers in order on each side of the puzzle, with only one color on each side.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Features
+- Runs natively on mobile, desktop, and the web
+- Five different puzzle sizes (2x2 - 6x6) for varying difficulty
+- Tracks your best move count for each puzzle size
+- Saves puzzle state between page/application loads
