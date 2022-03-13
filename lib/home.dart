@@ -180,7 +180,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin{
                           context: context,
                           applicationName: "Double Slide",
                           applicationVersion: "version 1.0.0",
-                          applicationLegalese: "Developed for the 2022 Flutter Puzzle Hack competition",
+                          applicationLegalese: "© 2022 Jordan Mosakowski\n\nDeveloped for the 2022 Flutter Puzzle Hack competition",
                         );
                       }, 
                       icon: const Icon(Icons.info_outline),
